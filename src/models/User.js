@@ -30,6 +30,10 @@ const User = sequelize.define(
     gender: {
       type: DataTypes.STRING,
       allowNull: true,
+    }, 
+    image: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     role: {
       type: DataTypes.STRING,

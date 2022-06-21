@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
 
-const Kategori = sequelize.define(
-  "kategori",
+const chat = sequelize.define(
+  "chat",
   {
     // Model attributes are defined here
     id: {
@@ -11,7 +11,15 @@ const Kategori = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    name: {
+    idsender:{
+        type:DataTypes.INTEGER,
+        allowNull:false  
+    },
+    idreceiver:{
+        type:DataTypes.INTEGER,
+        allowNull:false  
+      },
+    chat: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -21,4 +29,4 @@ const Kategori = sequelize.define(
   }
 );
 
-module.exports = Kategori;
+module.exports = chat;

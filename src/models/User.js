@@ -1,5 +1,9 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
+const Product = require("./product");
+const Profile = require("./profile");
+const transaction = require("./Transaction");
+
 
 const User = sequelize.define(
   "User",
@@ -23,31 +27,15 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    phone: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    gender: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    }, 
-    image: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    role: {
+    status: {
       type: DataTypes.STRING,
       defaultValue: "MEMBER",
-    },
-    address: {
-    type: DataTypes.TEXT,
-      allowNull: true,
-    },
-  
+    }
   },
   {
     // Other model options go here
   }
 );
+
 
 module.exports=User; 

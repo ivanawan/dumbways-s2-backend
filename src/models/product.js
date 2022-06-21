@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
 
 const Product = sequelize.define(
-  "Product",
+  "Product", 
   {
     // Model attributes are defined here
     id: {
@@ -11,7 +11,10 @@ const Product = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    name: {
+    iduser:{
+     type:DataTypes.INTEGER
+    },
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -19,11 +22,11 @@ const Product = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    description: {
+    desc: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    stok: {
+    qty: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -32,16 +35,16 @@ const Product = sequelize.define(
       allowNull: false,
     },
     rating: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
     terjual: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {
-    // Other model options go here
+    paranoid: true,
   }
 );
 

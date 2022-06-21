@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
 
-const Kategori = sequelize.define(
-  "kategori",
+const kategoriproduct = sequelize.define(
+  "kategoriproduct",
   {
     // Model attributes are defined here
     id: {
@@ -11,14 +11,18 @@ const Kategori = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    idproduct:{
+        type:DataTypes.INTEGER,
+        allowNull:false  
+      },
+    idkategori:{
+        type:DataTypes.INTEGER,
+        allowNull:false  
+      }  
   },
   {
     // Other model options go here
   }
 );
 
-module.exports = Kategori;
+module.exports = kategoriproduct;

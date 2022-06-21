@@ -1,24 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const userController= require('../Controllers/userController');
-const register = require('../middlewares/register');
-const login =require('../middlewares/login');
+const userController = require('../Controllers/userController');
+const joi = require('../middlewares/joi');
 const auth = require('../middlewares/auth');
 
-router.post('/login',login(), userController.login);
-  
-/* POST programming language */
-router.post('/register',register(), userController.register);
 
-router.get('/test',auth(),(req,res)=>{
-    console.log(req.user);
-    res.status(200).json('hooo');
-});
+router.post('/login',joi("login"), userController.login);
 
-/* PUT programming language */
-// router.put('/:id', userController.update);
+router.post('/register',joi("register"), userController.register);
 
-/* DELETE programming language */
-// router.delete('/:id', userController.destroy);
+router.put('/update',auth() , joi("register"),userController.update); // tidak menggunakan id karena user hanya bisa merubah datanya sendiri 
+
+router.delete('/',auth(),userController.destroy);
 
 module.exports=router;

@@ -1,49 +1,64 @@
 const express = require('express')
-const app = express();
 const cors = require('cors');
-const port = 5000
+const app = express();
 const bodyParser = require('body-parser')
+const port = 5000
 // import db from db connection
 const sequelize=require('./src/config/db_connection');
 // import model from folder model 
-const Kategori = require('./src/models/Kategori');
-const Product = require('./src/models/product');
-const User = require('./src/models/User');
+const {chat,Kategori,kategoriproduct,Product,Profile,User,transaction} = require('./src/models/index-model');
 // import route
 const authRoute = require('./src/routes/auth-router');
+const kategoriRoute = require('./src/routes/kategori-router');
+const productRoute = require('./src/routes/product-router');
+const transactionRoute= require('./src/routes/transaction-router');
+
+
+/**
+ *    +++++++++++++++   cors & header    +++++++++++++++
+ */ 
 
 app.use(cors());
 app.use(function (req, res, next) {
-
-  // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-
-  // Request methods you wish to allow
+  // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-  // Request headers you wish to allow
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
-//body parser
+
+
+
+/**
+ *    +++++++++++++++   body parser    +++++++++++++++
+ */ 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-//+++++++++++route app++++++++++
-app.get('/', (req, res) => {
-  res.send('Hello this api dumbmerch v.1.00 !')
-});
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+
+/**
+ *    +++++++++++++++   import route    +++++++++++++++
+ */ 
+app.use("/public", express.static(__dirname + "/public"));
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
+app.get('/', (req, res) =>{res.send('Hello this api dumbmerch v.1.00 !')});
 app.use('/user',authRoute);
+app.use('/category', kategoriRoute);
+app.use('/product', productRoute);
+app.use('/transaction',transactionRoute);
 
-// ++++++++++++++++++++++++++++++++++++++++++++++db conection+++++++++++++++++++++++++++ 
+
+
+
+/**
+ *    +++++++++++++++   db connection     +++++++++++++++
+ */ 
+
 const initApp = async () => {
     console.log("Testing the database connection..");
      try {
@@ -52,10 +67,8 @@ const initApp = async () => {
          /**
          * Syncronize the Post model.
          */
-        User.sync();
-        Kategori.sync();
-        Product.sync();
-        
+        await sequelize.sync();
+        // await transaction.sync({force:true});
       } catch (error) {
         console.error('Unable to connect to the database:', error);
       }
@@ -65,7 +78,7 @@ const initApp = async () => {
  */
 initApp();
 
-// ++++++++++++++++++++++++++++++++++++++++++++++end db conection+++++++++++++++++++++++++++ 
+
 
 
 

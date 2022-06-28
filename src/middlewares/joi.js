@@ -2,6 +2,7 @@ const product=require('../schema/joi-product');
 const kategori=require('../schema/joi-kategori');
 const auth= require('../schema/joi-user');
 const transaction = require('../schema/joi-transaction');
+const profil = require('../schema/joi-profile');
 
 const joiShema={
                  product: product.product,
@@ -9,7 +10,8 @@ const joiShema={
                  kategori:kategori,
                  login:auth.userLogin,
                  register:auth.userRegister,
-                 transaction:transaction
+                 transaction:transaction,
+                 profil:profil
                };
 
 

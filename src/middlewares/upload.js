@@ -1,17 +1,3 @@
-// const multer = require('multer');
-
-// var storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//       cb(null, "public/image/");
-//     },
-//     filename: function (req, file, cb) {
-//       cb(null, Date.now() + ".jpg"); //Appending .jpg
-//     },
-//   });
-//   const upload = multer({ storage });
-
-//   module.exports=upload;
-
 const multer = require('multer');
 
 exports.uploadFile = (imageFile) => {
@@ -69,6 +55,8 @@ exports.uploadFile = (imageFile) => {
       //     message: 'Please select files to upload!'
       //   })
       // }
+
+      console.log(req.body,req.file);
 
       // Limit
       if(err){

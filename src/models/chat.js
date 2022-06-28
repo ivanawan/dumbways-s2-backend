@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db_connection");
 
-const chat = sequelize.define(
-  "chat",
+const Chat = sequelize.define(
+  "Chat",
   {
     // Model attributes are defined here
     id: {
@@ -23,10 +23,7 @@ const chat = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-  },
-  {
-    // Other model options go here
   }
 );
 
-module.exports = chat;
+module.exports = Chat;

@@ -1,8 +1,14 @@
+
 const express = require('express')
 const cors = require('cors');
+// console.log(process.env);
 const app = express();
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const httpServer = createServer(app);
 const bodyParser = require('body-parser')
 const port = 5000
+const io = new Server(httpServer, { cors: {origin: '*' } });
 // import db from db connection
 const sequelize=require('./src/config/db_connection');
 // import model from folder model 
@@ -12,6 +18,16 @@ const authRoute = require('./src/routes/auth-router');
 const kategoriRoute = require('./src/routes/kategori-router');
 const productRoute = require('./src/routes/product-router');
 const transactionRoute= require('./src/routes/transaction-router');
+
+
+
+
+/**
+ *    +++++++++++++++   socket io    +++++++++++++++
+ */ 
+
+require('./src/socket/index')(io)
+
 
 
 /**
@@ -34,7 +50,7 @@ app.use(function (req, res, next) {
  *    +++++++++++++++   body parser    +++++++++++++++
  */ 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+// app.use(bodyParser.urlencoded());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
@@ -43,7 +59,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
  *    +++++++++++++++   import route    +++++++++++++++
  */ 
 app.use("/public", express.static(__dirname + "/public"));
-app.listen(port, () => {
+httpServer.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
 app.get('/', (req, res) =>{res.send('Hello this api dumbmerch v.1.00 !')});
@@ -67,7 +83,7 @@ const initApp = async () => {
          /**
          * Syncronize the Post model.
          */
-        await sequelize.sync();
+        // await sequelize.sync();
         // await transaction.sync({force:true});
       } catch (error) {
         console.error('Unable to connect to the database:', error);

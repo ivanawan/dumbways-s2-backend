@@ -1,4 +1,4 @@
-const {User}= require("../models/index-model");
+const {User, Profile}= require("../models/index-model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -23,6 +23,7 @@ async function login(req, res, next) {
         status: "success",
         data: {
           user: {
+            id:rslt.id,
             name: rslt.name,
             email: rslt.email,
             status: rslt.status,
@@ -73,6 +74,7 @@ async function register(req, res, next) {
       status: "success",
       data: {
         user: {
+          id:rslt.id,
           name: rslt.name,
           email: rslt.email,
           status: rslt.status,
@@ -155,6 +157,52 @@ async function destroy(req, res, next) {
   }
 }
 
+async function getProfile(req,res,next) {
+  try {
+    const user = await User.findOne({
+       where: { id : req.user.id} ,
+       include:{ model: Profile, as: "Profil" ,attributes:["phone","gender","image","address"]},
+       attributes:['id','name','email','status']
+      });
+    if (!user)
+      return res.json({ status: "failed", message: "id not found" });
+
+    return res.json({ status: "success", data: user});
+    
+  } catch (err) {
+    console.log(err);
+    return res.json({ status: "error", message: "server error" });
+  }
+}
+
+async function insertProfil(req,res,next){
+  const body = req.body;
+  const find = await Profile.findOne({ where: { iduser: req.user.id } });
+ 
+
+  if (find) {
+    return res.json({
+      status: "error",
+      message: "profil user has already",
+    });
+  }
+
+  try { 
+    body.iduser=req.user.id;
+    body.image =req.file.filename;
+    const rslt = await Profile.create(body);
+
+    return res.json({
+      status: "success",
+    });
+  } catch (err) {
+    return res.json({
+      status: "error",
+      message: "server error",
+    });
+  }
+}
+
 /**
  * to generate token jwt
  * @param {object} data 
@@ -168,4 +216,4 @@ function generateToken(data) {
   );
 }
 
-module.exports = { login, register, update, destroy };
+module.exports = { login, register, update, destroy ,getProfile,insertProfil};

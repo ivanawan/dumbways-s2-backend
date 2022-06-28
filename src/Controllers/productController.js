@@ -10,6 +10,7 @@ const { QueryTypes } = require('sequelize');
  */
 async function insert(req, res, next) {
   try {
+    console.log('insert');
     req.body.image = req.file.filename;
     req.body.iduser = req.user.id;
     const rslt = await Product.create(req.body);
@@ -91,12 +92,21 @@ async function update(req, res, next) {
  * @returns json 
  */
 async function getAll(req, res, next) {
+  const query={
+    where:{title:{[Op.like]:`%${req.query.title}%`}},
+    attributes: {
+      exclude: ["updatedAt", "createdAt", "deletedAt"],
+    }
+  }
+
+  const nonQuery={
+    attributes: {
+      exclude: ["updatedAt", "createdAt", "deletedAt"],
+    }
+  }
+
   try {
-    const products = await Product.findAll({
-      attributes: {
-        exclude: ["updatedAt", "createdAt", "deletedAt", "iduser"],
-      },
-    });
+    const products = await Product.findAll(req.query.title === undefined || /^\s*$/.test(req.query.title)  ? nonQuery:query );
     return res.json({
       status: "success",
       data: {
@@ -104,12 +114,14 @@ async function getAll(req, res, next) {
       },
     });
   } catch (err) {
+    console.log(err);
     return res.json({
       status: "error",
       message: "server err",
     });
   }
 }
+
 
 /**
  * get one get only one data 
@@ -123,7 +135,7 @@ async function getOne(req, res, next) {
     const product = await Product.findOne({
       where:{id:req.params.id},
       attributes: { 
-        exclude: ["updatedAt", "createdAt", "deletedAt", "iduser"]
+        exclude: ["updatedAt", "createdAt", "deletedAt"]
        },
     });
     return res.json({
@@ -274,6 +286,7 @@ async function destroyDeletedData(req, res, next) {
       },
     });
   } catch (err) {
+    console.log(err);
     return res.json({
       status: "error",
       message: "server error",

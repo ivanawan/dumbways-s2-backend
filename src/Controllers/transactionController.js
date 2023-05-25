@@ -78,9 +78,9 @@ async function insert(req, res, next) {
         secure: true,
       },
       customer_details: {
-        full_name: buyer?.name,
-        email: buyer?.email,
-        phone: buyer?.Profile?.phone,
+        full_name: buyer.name,
+        email: buyer.email,
+        phone: buyer.Profile.phone,
       },
     };
 
@@ -110,8 +110,8 @@ async function insert(req, res, next) {
 
 
 // Create configurate midtrans client with CoreApi here ...
-const MIDTRANS_SERVER_KEY = "SB-Mid-server-85FNcSXHjDDX7t3YjXmOC3Js";
-const MIDTRANS_CLIENT_KEY = "SB-Mid-client-4HI3uiV9g8Vf0PvA"
+const MIDTRANS_SERVER_KEY = process.env.MIDTRANS_SERVER_KEY;
+const MIDTRANS_CLIENT_KEY = process.env.MIDTRANS_CLIENT_KEY;
 
 const core = new midtransClient.CoreApi();
 

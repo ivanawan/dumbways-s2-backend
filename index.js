@@ -1,13 +1,14 @@
 
 const express = require('express')
 const cors = require('cors');
-// console.log(process.env);
+require('dotenv').config();
+
 const app = express();
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const httpServer = createServer(app);
-const bodyParser = require('body-parser')
-const port = 5000
+const bodyParser = require('body-parser');
+const port = process.env.PORT;
 const io = new Server(httpServer, { cors: {origin: '*' } });
 // import db from db connection
 const sequelize=require('./src/config/db_connection');
@@ -83,7 +84,7 @@ const initApp = async () => {
          /**
          * Syncronize the Post model.
          */
-        // await sequelize.sync();
+        await sequelize.sync();
         // await transaction.sync({force:true});
       } catch (error) {
         console.error('Unable to connect to the database:', error);

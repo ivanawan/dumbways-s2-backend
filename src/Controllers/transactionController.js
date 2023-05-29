@@ -78,9 +78,9 @@ async function insert(req, res, next) {
         secure: true,
       },
       customer_details: {
-        full_name: buyer.name,
-        email: buyer.email,
-        phone: buyer.Profile.phone,
+        full_name: buyer?.name,
+        email: buyer?.email,
+        phone: buyer?.Profile?.phone,
       },
     };
 
